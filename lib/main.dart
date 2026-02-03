@@ -1,62 +1,126 @@
-// main.dart
 import 'package:flutter/material.dart';
+import 'dart:math';
 
-// The main entry point of the app
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // 2-3 preset color themes
+  final List<ThemeData> themes = [
+    ThemeData(primarySwatch: Colors.blue),
+    ThemeData(primarySwatch: Colors.green),
+    ThemeData(primarySwatch: Colors.purple),
+  ];
+  int currentTheme = 0;
+
+  // Motivational quotes
+  final List<String> quotes = [
+    "Believe in yourself!",
+    "Keep pushing forward!",
+    "Every day is a new opportunity!",
+    "Dream big, work hard!",
+  ];
+  String currentQuote = "Believe in yourself!";
+
+  // Random generator
+  final Random random = Random();
+
+  void changeTheme() {
+    setState(() {
+      currentTheme = (currentTheme + 1) % themes.length;
+    });
+  }
+
+  void changeQuote() {
+    setState(() {
+      currentQuote = quotes[random.nextInt(quotes.length)];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // TASK 1: Change the title of the app
-      title: 'My Awerson app',
-      theme: ThemeData(
-        // TASK 2: Change the primary swatch color (try Colors.red, Colors.green)
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // TASK 3: Change the text in the top bar
-        title: Text('Welcome to my app'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // TASK 4: Change the main text below
-            Text(
-              'Welcome to my app ',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20), // Adds space between widgets
-            // TASK 5: Change the subtitle text
-            Text(
-              "Lets learn Flutter togther ",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                print('Button Clicked!');
-              },
-              // TASK 6: Change the text on the button
-              child: Text('Press HEre'),
+      title: 'Team App',
+      theme: themes[currentTheme],
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Team App Enhancements'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.color_lens),
+              onPressed: changeTheme,
+              tooltip: 'Change Theme',
             ),
           ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              // Profile Card
+              Card(
+                elevation: 4,
+                margin: EdgeInsets.all(16),
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Icon(Icons.person, size: 50, color: Colors.blue),
+                      SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Student Name',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Major: Computer Science',
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              // Motivational Quotes
+              GestureDetector(
+                onTap: changeQuote,
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    currentQuote,
+                    style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              // Icon Gallery
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Icon(Icons.sports_basketball, size: 40, color: Colors.orange),
+                    Icon(Icons.music_note, size: 40, color: Colors.red),
+                    Icon(Icons.brush, size: 40, color: Colors.purple),
+                    Icon(Icons.book, size: 40, color: Colors.green),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
